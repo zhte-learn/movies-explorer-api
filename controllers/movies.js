@@ -1,6 +1,5 @@
 const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-error');
-//const ValidationError = require('../errors/validation-error');
 const ForbiddenError = require('../errors/forbidden-error');
 
 const getMovies = (req, res, next) => {
@@ -10,15 +9,11 @@ const getMovies = (req, res, next) => {
 };
 
 const createMovie = (req, res, next) => {
-  console.log(req.body)
   const { country, director, duration, year, image, trailer, thumbnail, movieId, nameRU, nameEN } = req.body;
   const { _id } = req.user;
   Movie.create({ country, director, duration, year, image, trailer, thumbnail, movieId, nameRU, nameEN, owner: _id })
     .then((movie) => res.send(movie))
-    .catch((err) => {
-      console.log(err)
-      next(err)
-    });
+    .catch((err) => next(err));
 };
 
 const deleteMovie = (req, res, next) => {
@@ -27,7 +22,6 @@ const deleteMovie = (req, res, next) => {
   Movie.findById(movieId)
     .orFail(() => new NotFoundError('Запрашиваемый фильм не найден'))
     .then((movie) => {
-      console.log(movie)
       if (movie.owner.toString() === req.user._id) {
         Movie.findByIdAndRemove(movieId)
           .orFail(() => new NotFoundError('Запрашиваемый фильм не найден'))
