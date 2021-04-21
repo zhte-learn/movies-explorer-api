@@ -83,7 +83,7 @@ const getUserMe = (req, res, next) => {
 const updateUserInfo = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
-    { email: req.body.email, password: req.body.password },
+    { email: req.body.email, name: req.body.name },
     {
       new: true,
       runValidators: true,

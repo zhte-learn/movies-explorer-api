@@ -9,9 +9,32 @@ const getMovies = (req, res, next) => {
 };
 
 const createMovie = (req, res, next) => {
-  const { country, director, duration, year, image, trailer, thumbnail, movieId, nameRU, nameEN } = req.body;
+  const {
+    country,
+    director,
+    duration,
+    year,
+    image,
+    trailer,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
+  } = req.body;
   const { _id } = req.user;
-  Movie.create({ country, director, duration, year, image, trailer, thumbnail, movieId, nameRU, nameEN, owner: _id })
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    image,
+    trailer,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
+    owner: _id,
+  })
     .then((movie) => res.send(movie))
     .catch((err) => next(err));
 };

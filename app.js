@@ -3,21 +3,29 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const usersRouter = require('./routes/users.js');
 const moviesRouter = require('./routes/movies.js');
 const { addUser, login } = require('./controllers/users');
+const NotFoundError = require('./errors/not-found-error');
+const errorHandler = require('./errors/error-handler');
+const limiter = require('./rate-limiter');
+const devDatabaseUrl = require('./db-url');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DB_URL } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? DB_URL : devDatabaseUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.use(limiter);
+app.use(helmet());
 
 app.use(bodyParser.json());
 
@@ -35,7 +43,7 @@ app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  })
+  }),
 }), login);
 
 app.use(auth);
@@ -51,11 +59,7 @@ app.use((req, res, next) => {
 
 app.use(errors());
 
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({ message: statusCode === 500 ? 'На сервере произошла ошибка' : message });
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

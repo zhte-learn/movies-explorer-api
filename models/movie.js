@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -49,16 +48,8 @@ const movieSchema = new mongoose.Schema({
     },
   },
   movieId: {
-    //_id фильма, который содержится в ответе сервиса MoviesExplorer. Обязательное поле.
-    //type: mongoose.Schema.Types.ObjectId,
     type: Number,
     required: true,
-    /* validate: {
-      validator(v) {
-        return ObjectId.isValid(v);
-      },
-      message: "Некорректный id",
-    }, */
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
