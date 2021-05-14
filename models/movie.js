@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 
+function isMyFieldRequired(v) {
+  return typeof v === 'string';
+}
+
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
-    required: true,
+    required: isMyFieldRequired,
   },
   director: {
     type: String,
-    required: true,
+    required: isMyFieldRequired,
   },
   duration: {
     type: Number,
@@ -15,7 +19,7 @@ const movieSchema = new mongoose.Schema({
   },
   year: {
     type: String,
-    required: true,
+    required: isMyFieldRequired,
   },
   image: {
     type: String,
@@ -29,15 +33,15 @@ const movieSchema = new mongoose.Schema({
   },
   trailer: {
     type: String,
-    required: true,
-    validate: {
+    required: isMyFieldRequired,
+    /* validate: {
       validator(v) {
         return /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?#?$/.test(v);
       },
       message: 'Неверная ссылка!',
-    },
+    }, */
   },
-  thumbnail: {
+  /* thumbnail: {
     type: String,
     required: true,
     validate: {
@@ -46,7 +50,7 @@ const movieSchema = new mongoose.Schema({
       },
       message: 'Неверная ссылка!',
     },
-  },
+  }, */
   movieId: {
     type: Number,
     required: true,
@@ -58,11 +62,11 @@ const movieSchema = new mongoose.Schema({
   },
   nameRU: {
     type: String,
-    required: true,
+    required: isMyFieldRequired,
   },
   nameEN: {
     type: String,
-    required: true,
+    required: isMyFieldRequired,
   },
 });
 

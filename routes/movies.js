@@ -11,16 +11,16 @@ moviesRouter.get('/movies', getMovies);
 
 moviesRouter.post('/movies', celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required(),
-    director: Joi.string().required(),
+    country: Joi.string().allow('').required(),
+    director: Joi.string().allow('').required(),
     duration: Joi.number().required(),
-    year: Joi.string().required(),
+    year: Joi.string().allow('').required(),
     image: Joi.string().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?#?$/).required(),
-    trailer: Joi.string().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?#?$/).required(),
-    thumbnail: Joi.string().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?#?$/).required(),
+    trailer: Joi.string().allow('').required(),
+    /* thumbnail: Joi.string().allow(null), */
     movieId: Joi.number().required(),
-    nameRU: Joi.string().required(),
-    nameEN: Joi.string().required(),
+    nameRU: Joi.string().allow('').required(),
+    nameEN: Joi.string().allow('').required(),
   }).unknown(true),
 }), createMovie);
 

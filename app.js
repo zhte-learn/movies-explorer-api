@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
@@ -17,6 +18,19 @@ const devDatabaseUrl = require('./db-url');
 
 const { PORT = 3000, NODE_ENV, DB_URL } = process.env;
 const app = express();
+
+const corsOptions = {
+  /*  origin: '*', */
+  origin: [
+    'http://localhost:3001',
+  ],
+  methods: ['GET', 'PUT', 'POST', 'HEAD', 'PATCH', 'DELETE'],
+  /* allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept', */
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+/* app.use('*', corsOptions); */
 
 mongoose.connect(NODE_ENV === 'production' ? DB_URL : devDatabaseUrl, {
   useNewUrlParser: true,
